@@ -1,0 +1,65 @@
+:root{
+    --primarycolor: #c46eea;
+    --secondarycolor: #442b82;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Header styles */
+header{
+    padding: 15px;
+}
+
+header a {
+    text-decoration: none;
+    color: var(--primarycolor);
+}
+
+header nav ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
+}
+
+/* Main styles */
+
+.intro{
+    text-align: center;
+}
+
+.intro h1{
+    width: 80%;
+    font-size: 30px;
+    margin: 0 auto;
+   
+    padding: 20px 20px;
+}
+.intro p{
+    width: 80%;
+    font-size: 20px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+  
+}
+
+/* Footer/button styles */
+.btn{
+    background-color: var(--secondarycolor);
+    color: #ffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.btn:hover{
+    background-color: var(--primarycolor);
+}
