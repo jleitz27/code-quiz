@@ -23,6 +23,10 @@ header a {
     color: var(--primarycolor);
 }
 
+header a:hover{
+    color: var(--secondarycolor);
+}
+
 header nav ul{
     display: flex;
     flex-wrap: wrap;
@@ -48,7 +52,6 @@ header nav ul{
     font-size: 20px;
     margin: 0 auto;
     padding-bottom: 20px;
-  
 }
 
 /* Footer/button styles */
