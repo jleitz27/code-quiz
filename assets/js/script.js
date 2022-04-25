@@ -1,4 +1,17 @@
+//List sections(html)
+var quizSections = document.querySelectorAll(".quiz-section");
+
 // Start Game
+var startSection = document.getElementById("start");
+var startBtn = document.getElementById("start-btn");
+
+var quizSection = document.getElementById("quiz-questions");
+var timeRemaining = document.getElementById("time-remaining");
+var question = document.getElementById("question");
+var answers = document.getElementById("answers");
+var answerStatus = document.getElementById(".answer-status");
+var correct = document.getElementById("correct");
+var wrong = document.getElementById("wrong");
 
 
 //Questions

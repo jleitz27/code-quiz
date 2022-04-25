@@ -23,36 +23,38 @@
     </header>
 
     <main>
-        <section class="intro">
+        <section id="start" class="quiz-section">
             <h1>Coding Quiz Challenge</h1>
             <p>
                 Try to answer the following code-related questions within the time limit. 
                 Keep in mind that incorrect answers will penalize your score/time by ten seconds
             </p>
 
-            <button class="btn" id="startQuiz">
+            <button class="btn" id="start-btn">
                 Start Quiz
             </button>
         </section>
 
+        <section id="quiz-questions" class="hidden quiz-section">
+            <p id="timer">Time: <span id="time-remaining">0</span></p>
+            <h1 id="question">Quiz Question</h1>
+            <ul id="answers"></ul>
+        </section>
+        
         <section id="end-game" class="quiz-section hidden">
             <h1 id="end-message">Quiz completed</h1>
-            <p id="score-amount">
-                You scored: <span id="score">0</span>
-            </p>
-
+            <p id="score-amount">You scored: <span id="score">0</span></p>
             <form id="enter-score">
-                <label for="name"> Enter your initials</label>
+                <label for="name">Enter initials:</label>
                 <input type="text" id="name">
                 <button type="submit">Submit</button>
                 <p id="error-message"></p>
-            </form>
-            <a href="./index.html" class="back-btn">Back to quiz</a>
+                <a href="./index.html" class="back-btn">Back to quiz</a>
         </section>
 
         <div>
-            <p id="correct" class="choice-status hidden" data-state="hidden">Correct!</p>
-            <p id="wrong" class="choice-status hiddent" data-state="hiddent">Wrong!</p>
+            <p id="correct" class="answer-status hidden" data-state="hidden">Correct!</p>
+            <p id="wrong" class="answer-status hiddent" data-state="hidden">Wrong!</p>
         </div>
 
     </main>
