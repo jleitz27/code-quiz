@@ -33,8 +33,27 @@
             <button class="btn" id="startQuiz">
                 Start Quiz
             </button>
-
         </section>
+
+        <section id="end-game" class="quiz-section hidden">
+            <h1 id="end-message">Quiz completed</h1>
+            <p id="score-amount">
+                You scored: <span id="score">0</span>
+            </p>
+
+            <form id="enter-score">
+                <label for="name"> Enter your initials</label>
+                <input type="text" id="name">
+                <button type="submit">Submit</button>
+                <p id="error-message"></p>
+            </form>
+            <a href="./index.html" class="back-btn">Back to quiz</a>
+        </section>
+
+        <div>
+            <p id="correct" class="choice-status hidden" data-state="hidden">Correct!</p>
+            <p id="wrong" class="choice-status hiddent" data-state="hiddent">Wrong!</p>
+        </div>
 
     </main>
     
