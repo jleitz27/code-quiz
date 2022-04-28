@@ -1,7 +1,7 @@
 //List sections(html)
 var quizSections = document.querySelectorAll(".quiz-section");
 
-// Start Game
+// Start Quiz
 var startSection = document.getElementById("start");
 var startBtn = document.getElementById("start-btn");
 
@@ -9,8 +9,8 @@ var startBtn = document.getElementById("start-btn");
 var quizSection = document.getElementById("quiz-questions");
 var timeLeft = document.getElementById("time-remaining");
 var question = document.getElementById("question");
-var answers = document.getElementById("answers");
-var answerStatus = document.getElementById(".answer-status");
+var answers = document.getElementById("choices");
+var answerStatus = document.querySelectorAll(".answer-status");
 var correct = document.getElementById("correct");
 var wrong = document.getElementById("wrong");
 
@@ -20,19 +20,16 @@ var endMessage = document.getElementById("end-message");
 var endScore = document.getElementById("score");
 var nameInput = document.getElementById("name");
 var enterScore = document.getElementById("enter-score");
-var errorMessage = document.getElementById("error-message");
-
+var nameError = document.getElementById("error-message");
 
 //Questions
 class Question {
-    constructor(question, choices, indexOfCorrectChoice) {
+    constructor(question, answers, indexOfCorrectChoice) {
         this.question = question;
-        this.choices = choices;
+        this.answers = answers;
         this.indexOfCorrectChoice = indexOfCorrectChoice;
     }
 }
-
-
 var question1 = new Question("Commonly used data types DO NOT include:", ["strings", "booleans", "alerts", "numbers"], 2 );
 var question2 = new Question("The condition in an if / else statement is enclosed within _____", ["quotes", "curly brackets", "parantheses", "square brackets"], 2);
 var question3 = new Question("Arrays in JavaScript can be used to store______.",["numbers and strings", "other arrays", "booleans", "all of the above"], 3);
@@ -46,29 +43,30 @@ var currentQuestion = 0;
 //Time variables
 var totalTime = 75;
 var totalTimeInterval;
-var answerStatusTimeout;
+var answerStatusTimeout; 
 
-//Event listeners for click and submit buttons
-startBtn.addEventListener("click", startQuiz);
-answers.addEventListener("click", selectAnswer);
-//enterScore.addEventListener("submit", )
+//Event listeners for click and submit buttons 
+startBtn.addEventListener('click', startGame);
+answers.addEventListener('click', selectAnswer);
+enterScore.addEventListener('submit', processInput);
 
 //Start quiz
-function startQuiz(){
-    showElement(quizSection, quizSections);
-
-    showTime();
+function startGame() {
+    showElement(quizSections, quizSection);
+    
+    showTime();  
     showQuestion();
+
     startTimer();
 }
 
 //Show elements
-function showElement(showElement) {
-    // for (element of quizList) {
-    //     hideElement(element);
-    // }
+function showElement(quizList,showElement) {
+    for (element of quizList) {
+        hideElement(element);
+    }
     showElement.classList.remove("hidden");
-}
+} 
 
 // Hide elements
 function hideElement(element) {
@@ -77,47 +75,49 @@ function hideElement(element) {
     }
 }
 
-//Timer 
-function showTime(){
+//Timer  
+function showTime() {
     timeLeft.textContent = totalTime;
 }
-function startTimer(){
-    totalTimeInterval =setInterval(function(){
+
+function startTimer() {
+    totalTimeInterval = setInterval(function() {
         totalTime--;
         showTime();
         checkTime();
+
     }, 1000);
 }
 
-function checkTime(){
-    if(totalTime <+0){
-        totalTime =0;
+function checkTime() {
+    if (totalTime <= 0) {
+        totalTime = 0;
         endQuiz();
     }
 }
 
 //Question function
-function showQuestion(){
-    Question.textContent = questionList[currentQuestion].question;
-    
+function showQuestion() {
+    question.textContent = questionList[currentQuestion].question;
+
     displayAnswerList();
 }
 
-function displayAnswerList(){
+function displayAnswerList() {
     answers.innerHTML = "";
 
-    questionList[currentQuestion].choices.forEach(function(answer, index){
-        var li = document.createElement("li");
+    questionList[currentQuestion].answers.forEach(function(answer, index) {
+        const li = document.createElement("li");
         li.dataset.index = index;
-        var button = document.createElement("button");
-        button.textContent = (index + 1) + "."+ answer;
+        const button = document.createElement("button");
+        button.textContent = (index + 1) + ". " + answer;
         li.appendChild(button);
         answers.appendChild(li);
     });
 }
 
 //answering a question
-function selectAnswer(event){
+function selectAnswer(event) {
     var userAnswer = parseInt(event.target.parentElement.dataset.index);
 
     resetAnswerStatusEffects();
@@ -126,16 +126,21 @@ function selectAnswer(event){
 }
 
 //display answer status
-function resetAnswerStatusEffects(){
+function resetAnswerStatusEffects() {
     clearTimeout(answerStatusTimeout);
+  //styleTimeLeftDefault();
 }
+
+//  function styleTimeLeftDefault() {
+//    timeLeft.style.color = "#4616E8";
+//  }
 
 function styleTimeLeftWrong() {
     timeLeft.style.color = "#E81648";
 }
 
-function checkAnswer(userAnswer){
-    if (isAnswerCorrect (userAnswer)){
+function checkAnswer(userAnswer) {
+    if (isAnswerCorrect(userAnswer)) {
         displayAnswerCorrectEffects();
     } else {
         displayAnswerWrongEffects();
@@ -144,37 +149,42 @@ function checkAnswer(userAnswer){
 
 function isAnswerCorrect(choice) {
     return choice === questionList[currentQuestion].indexOfCorrectChoice;
-}
+    }
 
-function displayAnswerWrongEffects(){
+    function displayAnswerWrongEffects() {
     deductTimeBy(10);
+
+    styleTimeLeftWrong();
     showElement(answerStatus, wrong);
 
-    answerStatusTimeout = setTimeout(function(){
+    answerStatusTimeout = setTimeout(function() {
         hideElement(wrong);
+        //styleTimeLeftDefault();
     }, 1000);
 }
 
-function deductTimeBy(seconds){
+function deductTimeBy(seconds) {
     totalTime -= seconds;
     checkTime();
     showTime();
 }
 
-function displayAnswerCorrectEffects(){
+function displayAnswerCorrectEffects() {
     showElement(answerStatus, correct);
 
-    answerStatusTimeout = setTimeout(function(){
+    answerStatusTimeout = setTimeout(function() {
         hideElement(correct);
     }, 1000);
 }
 
 //next question
-function getNextQuestion(){
+function getNextQuestion() {
     currentQuestion++;
-    if (currentQuestion>= questionList.length){
+    if (currentQuestion >= questionList.length) {
         endQuiz();
-    } else{showQuestion();}
+    } else {
+        showQuestion();
+    }
 }
 
 // End of quiz
@@ -192,9 +202,83 @@ function displayScore() {
 
 function setEndHeading() {
     if (totalTime === 0) {
-        endMessage.textContent = "Sorry! Your time is done!";
+        endMessage.textContent = "Sorry! Your time is up!";
     } else {
         endMessage.textContent = "Congrats! Your done!";
     }
 }
 
+//Putting name in
+function processInput(event) {
+    event.preventDefault();
+
+    var initials = nameInput.value.toUpperCase();
+
+    if (isInputValid(initials)) {
+        var score = totalTime;
+        var highscoreEntry = getNewHighscoreEntry(initials, score);
+        saveHighscoreEntry(highscoreEntry);
+        window.location.href= "./highscores.html";
+    }
+}
+
+function getNewHighscoreEntry(initials, score) {
+    const entry = {
+        initials: initials,
+        score: score,
+    }
+    return entry;
+}
+
+function isInputValid(initials) {
+    var errorMessage = "";
+    if (initials === "") {
+        errorMessage = "You can't submit empty initials!";
+        displayFormError(errorMessage);
+        return false;
+    } else if (initials.match(/[^a-z]/ig)) {
+        errorMessage = "Initials may only include letters."
+        displayFormError(errorMessage);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function displayFormError(errorMessage) {
+    nameError.textContent = errorMessage;
+    if (!nameInput.classList.contains("error")) {
+        nameInput.classList.add("error");
+    }
+}
+
+function saveHighscoreEntry(highscoreEntry) {
+    const currentScores = getScoreList();
+    placeEntryInHighscoreList(highscoreEntry, currentScores);
+    localStorage.setItem('scoreList', JSON.stringify(currentScores));
+}
+
+function getScoreList() {
+    const currentScores = localStorage.getItem('scoreList');
+    if (currentScores) {
+        return JSON.parse(currentScores);
+    } else {
+        return [];
+    }
+}
+
+function placeEntryInHighscoreList(newEntry, scoreList) {
+    const newScoreIndex = getNewScoreIndex(newEntry, scoreList);
+    scoreList.splice(newScoreIndex, 0, newEntry);
+}
+
+function getNewScoreIndex(newEntry, scoreList) {
+    if (scoreList.length > 0) {
+        for (let i = 0; i < scoreList.length; i++) {
+            if (scoreList[i].score <= newEntry.score) {
+            return i;
+            }
+        } 
+    }
+    return scoreList.length;
+}
