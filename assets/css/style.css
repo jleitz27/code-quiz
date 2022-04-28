@@ -54,6 +54,11 @@ header nav ul{
     padding-bottom: 20px;
 }
 
+/* Hidden */
+.hidden {
+    display: none;
+}
+
 /* Footer/button styles */
 .btn{
     background-color: var(--secondarycolor);
