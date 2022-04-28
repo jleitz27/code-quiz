@@ -33,8 +33,13 @@ var questionList = [question1, question2, question3, question4, question5 ];
 
 var currentQuestion = 0;
 
+//Time variables
+var totalTime = 75;
+var totalTimeInterval;
+var answerStatusTimeout;
+
 //Event listeners for click and submit buttons
-startBtn.addEventListener("click", startGame);
+startBtn.addEventListener("click", startQuiz);
 answers.addEventListener("click", selectAnswer);
 
 //Show elements
@@ -47,8 +52,35 @@ function showElement(siblingList, showElement){
 
 // Hide elements
 function hideElement (element){
-    if (!element.classList.contains ("hiddent")){
+    if (!element.classList.contains ("hidden")){
         element.classList.add("hidden")
     }
 }
 
+//Timer 
+function showTime(){
+    timeRemaining.textContent = totalTime;
+}
+function startTimer(){
+    totalTimeInterval =setInterval(function(){
+        totalTime--;
+        showTime();
+        checkTime();
+    }, 1000);
+}
+
+function checkTime(){
+    if(totalTime <+0){
+        totalTime =0;
+        endQuiz();
+    }
+}
+
+//Start quiz
+function startQuiz(){
+    showElement(quizSection, quizSections);
+
+    showTime();
+    startTimer();
+
+}
