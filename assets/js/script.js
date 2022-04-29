@@ -75,27 +75,6 @@ function hideElement(element) {
     }
 }
 
-//Timer  
-function showTime() {
-    timeLeft.textContent = totalTime;
-}
-
-function startTimer() {
-    totalTimeInterval = setInterval(function() {
-        totalTime--;
-        showTime();
-        checkTime();
-
-    }, 1000);
-}
-
-function checkTime() {
-    if (totalTime <= 0) {
-        totalTime = 0;
-        endQuiz();
-    }
-}
-
 //Question function
 function showQuestion() {
     question.textContent = questionList[currentQuestion].question;
@@ -107,9 +86,9 @@ function displayAnswerList() {
     answers.innerHTML = "";
 
     questionList[currentQuestion].answers.forEach(function(answer, index) {
-        var li = document.createElement("li");
+        const li = document.createElement("li");
         li.dataset.index = index;
-        var button = document.createElement("button");
+        const button = document.createElement("button");
         button.textContent = (index + 1) + ". " + answer;
         li.appendChild(button);
         answers.appendChild(li);
@@ -128,12 +107,7 @@ function selectAnswer(event) {
 //display answer status
 function resetAnswerStatusEffects() {
     clearTimeout(answerStatusTimeout);
-  //styleTimeLeftDefault();
 }
-
-//  function styleTimeLeftDefault() {
-//    timeLeft.style.color = "#4616E8";
-//  }
 
 function styleTimeLeftWrong() {
     timeLeft.style.color = "#E81648";
@@ -187,24 +161,24 @@ function getNextQuestion() {
     }
 }
 
-// End of quiz
-function endQuiz() {
-    clearInterval(totalTimeInterval);
-    
-    showElement(quizSections, endSection);
-    displayScore();
-    setEndHeading();
+//Timer  
+function showTime() {
+    timeLeft.textContent = totalTime;
 }
 
-function displayScore() {
-    endScore.textContent = totalTime;
+function startTimer() {
+    totalTimeInterval = setInterval(function() {
+        totalTime--;
+        showTime();
+        checkTime();
+
+    }, 1000);
 }
 
-function setEndHeading() {
-    if (totalTime === 0) {
-        endMessage.textContent = "Sorry! Your time is up!";
-    } else {
-        endMessage.textContent = "Congrats! Your done!";
+function checkTime() {
+    if (totalTime <= 0) {
+        totalTime = 0;
+        endQuiz();
     }
 }
 
@@ -223,7 +197,7 @@ function processInput(event) {
 }
 
 function getNewHighscoreEntry(initials, score) {
-    var entry = {
+    const entry = {
         initials: initials,
         score: score,
     }
@@ -253,13 +227,13 @@ function displayFormError(errorMessage) {
 }
 
 function saveHighscoreEntry(highscoreEntry) {
-    var currentScores = getScoreList();
+    const currentScores = getScoreList();
     placeEntryInHighscoreList(highscoreEntry, currentScores);
     localStorage.setItem('scoreList', JSON.stringify(currentScores));
 }
 
 function getScoreList() {
-    var currentScores = localStorage.getItem('scoreList');
+    const currentScores = localStorage.getItem('scoreList');
     if (currentScores) {
         return JSON.parse(currentScores);
     } else {
@@ -268,13 +242,13 @@ function getScoreList() {
 }
 
 function placeEntryInHighscoreList(newEntry, scoreList) {
-    var newScoreIndex = getNewScoreIndex(newEntry, scoreList);
+    const newScoreIndex = getNewScoreIndex(newEntry, scoreList);
     scoreList.splice(newScoreIndex, 0, newEntry);
 }
 
 function getNewScoreIndex(newEntry, scoreList) {
     if (scoreList.length > 0) {
-        for (var i = 0; i < scoreList.length; i++) {
+        for (let i = 0; i < scoreList.length; i++) {
             if (scoreList[i].score <= newEntry.score) {
             return i;
             }
@@ -283,8 +257,90 @@ function getNewScoreIndex(newEntry, scoreList) {
     return scoreList.length;
 }
 
-//High Score table
-var scoreTable = document.getElementById("scores-table")
-var clearBtn = document.getElementById("clear")
+// End of quiz
+function endQuiz() {
+    clearInterval(totalTimeInterval);
+    
+    showElement(quizSections, endSection);
+    displayScore();
+    setEndHeading();
+}
 
-clearBtn.addEventListener("click")
+function displayScore() {
+    endScore.textContent = totalTime;
+}
+
+function setEndHeading() {
+    if (totalTime === 0) {
+        endMessage.textContent = "Sorry! Your time is up!";
+    } else {
+        endMessage.textContent = "Congrats! Your done!";
+    }
+}
+
+
+
+//High Score table
+var scoreTable = document.getElementById("scores-table");
+var clearBtn = document.getElementById("clear");
+
+//Event listener
+clearBtn.addEventListener('click', clearHighscores);
+
+//Table on open of page:
+generateHighscoresTable();
+
+function generateHighscoresTable() {
+    var highscores = localStorage.getItem("scoreList");
+    if (highscores) {
+        addHighscoreTableRows(highscores);
+    } 
+    window.location.href= "./high-scores.html";
+}
+
+//Add table
+function addHighscoreTableRows(highscores) {
+    highscores = JSON.parse(highscores);
+
+    highscores.forEach(function(scoreItem, index) {
+        var rankCell = createRankCell(index + 1);
+        var scoreCell = createScoreCell(scoreItem.score);
+        var initialsCell = createInitialsCell(scoreItem.initials);
+        var highscoreTableRow = createHighscoreTableRow(rankCell, scoreCell, initialsCell);
+        scoreTable.appendChild(highscoreTableRow);
+    });
+}
+
+function createRankCell(rank) {
+    var rankCell = document.createElement('td');
+    rankCell.textContent = `#${rank}`;
+    return rankCell;
+}
+
+function createScoreCell(score) {
+    var scoreCell = document.createElement('td');
+    scoreCell.textContent = score;
+    return scoreCell;
+}
+
+function createInitialsCell(initials) {
+    var initialsCell = document.createElement('td');
+    initialsCell.textContent = initials;
+    return initialsCell;
+}
+
+function createHighscoreTableRow(rankCell, scoreCell, initialsCell) {
+    var tableRow = document.createElement('tr');
+    tableRow.appendChild(rankCell);
+    tableRow.appendChild(scoreCell);
+    tableRow.appendChild(initialsCell);
+    return tableRow;
+}
+
+//Clear scores
+function clearHighscores() {
+    localStorage.setItem('scoreList', []);
+    while (scoreTable.children.length > 1) {
+        scoreTable.removeChild(scoreTable.lastChild);
+    }
+}
