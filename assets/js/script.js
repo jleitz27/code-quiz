@@ -107,9 +107,9 @@ function displayAnswerList() {
     answers.innerHTML = "";
 
     questionList[currentQuestion].answers.forEach(function(answer, index) {
-        const li = document.createElement("li");
+        var li = document.createElement("li");
         li.dataset.index = index;
-        const button = document.createElement("button");
+        var button = document.createElement("button");
         button.textContent = (index + 1) + ". " + answer;
         li.appendChild(button);
         answers.appendChild(li);
@@ -218,12 +218,12 @@ function processInput(event) {
         var score = totalTime;
         var highscoreEntry = getNewHighscoreEntry(initials, score);
         saveHighscoreEntry(highscoreEntry);
-        window.location.href= "./highscores.html";
+        window.location.href= "./high-scores.html";
     }
 }
 
 function getNewHighscoreEntry(initials, score) {
-    const entry = {
+    var entry = {
         initials: initials,
         score: score,
     }
@@ -253,13 +253,13 @@ function displayFormError(errorMessage) {
 }
 
 function saveHighscoreEntry(highscoreEntry) {
-    const currentScores = getScoreList();
+    var currentScores = getScoreList();
     placeEntryInHighscoreList(highscoreEntry, currentScores);
     localStorage.setItem('scoreList', JSON.stringify(currentScores));
 }
 
 function getScoreList() {
-    const currentScores = localStorage.getItem('scoreList');
+    var currentScores = localStorage.getItem('scoreList');
     if (currentScores) {
         return JSON.parse(currentScores);
     } else {
@@ -268,13 +268,13 @@ function getScoreList() {
 }
 
 function placeEntryInHighscoreList(newEntry, scoreList) {
-    const newScoreIndex = getNewScoreIndex(newEntry, scoreList);
+    var newScoreIndex = getNewScoreIndex(newEntry, scoreList);
     scoreList.splice(newScoreIndex, 0, newEntry);
 }
 
 function getNewScoreIndex(newEntry, scoreList) {
     if (scoreList.length > 0) {
-        for (let i = 0; i < scoreList.length; i++) {
+        for (var i = 0; i < scoreList.length; i++) {
             if (scoreList[i].score <= newEntry.score) {
             return i;
             }
@@ -282,3 +282,9 @@ function getNewScoreIndex(newEntry, scoreList) {
     }
     return scoreList.length;
 }
+
+//High Score table
+var scoreTable = document.getElementById("scores-table")
+var clearBtn = document.getElementById("clear")
+
+clearBtn.addEventListener("click")

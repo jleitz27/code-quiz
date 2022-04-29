@@ -93,3 +93,8 @@ header nav ul{
     font-size: 30px;
     font-weight: bold;
 }
+
+.go-back{
+    color: #ffff;
+    text-decoration: none;
+}
