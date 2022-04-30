@@ -86,9 +86,9 @@ function displayAnswerList() {
     answers.innerHTML = "";
 
     questionList[currentQuestion].answers.forEach(function(answer, index) {
-        const li = document.createElement("li");
+        var li = document.createElement("li");
         li.dataset.index = index;
-        const button = document.createElement("button");
+        var button = document.createElement("button");
         button.textContent = (index + 1) + ". " + answer;
         li.appendChild(button);
         answers.appendChild(li);
@@ -133,7 +133,6 @@ function isAnswerCorrect(choice) {
 
     answerStatusTimeout = setTimeout(function() {
         hideElement(wrong);
-        //styleTimeLeftDefault();
     }, 1000);
 }
 
@@ -197,7 +196,7 @@ function processInput(event) {
 }
 
 function getNewHighscoreEntry(initials, score) {
-    const entry = {
+    var entry = {
         initials: initials,
         score: score,
     }
@@ -207,7 +206,7 @@ function getNewHighscoreEntry(initials, score) {
 function isInputValid(initials) {
     var errorMessage = "";
     if (initials === "") {
-        errorMessage = "You can't submit empty initials!";
+        errorMessage = "You must include initials!";
         displayFormError(errorMessage);
         return false;
     } else if (initials.match(/[^a-z]/ig)) {
@@ -227,13 +226,13 @@ function displayFormError(errorMessage) {
 }
 
 function saveHighscoreEntry(highscoreEntry) {
-    const currentScores = getScoreList();
+    var currentScores = getScoreList();
     placeEntryInHighscoreList(highscoreEntry, currentScores);
     localStorage.setItem('scoreList', JSON.stringify(currentScores));
 }
 
 function getScoreList() {
-    const currentScores = localStorage.getItem('scoreList');
+    var currentScores = localStorage.getItem('scoreList');
     if (currentScores) {
         return JSON.parse(currentScores);
     } else {
@@ -242,13 +241,13 @@ function getScoreList() {
 }
 
 function placeEntryInHighscoreList(newEntry, scoreList) {
-    const newScoreIndex = getNewScoreIndex(newEntry, scoreList);
+    var newScoreIndex = getNewScoreIndex(newEntry, scoreList);
     scoreList.splice(newScoreIndex, 0, newEntry);
 }
 
 function getNewScoreIndex(newEntry, scoreList) {
     if (scoreList.length > 0) {
-        for (let i = 0; i < scoreList.length; i++) {
+        for (var i = 0; i < scoreList.length; i++) {
             if (scoreList[i].score <= newEntry.score) {
             return i;
             }
@@ -275,72 +274,5 @@ function setEndHeading() {
         endMessage.textContent = "Sorry! Your time is up!";
     } else {
         endMessage.textContent = "Congrats! Your done!";
-    }
-}
-
-
-
-//High Score table
-var scoreTable = document.getElementById("scores-table");
-var clearBtn = document.getElementById("clear");
-
-//Event listener
-clearBtn.addEventListener('click', clearHighscores);
-
-//Table on open of page:
-generateHighscoresTable();
-
-function generateHighscoresTable() {
-    var highscores = localStorage.getItem("scoreList");
-    if (highscores) {
-        addHighscoreTableRows(highscores);
-    } 
-    window.location.href= "./high-scores.html";
-}
-
-//Add table
-function addHighscoreTableRows(highscores) {
-    highscores = JSON.parse(highscores);
-
-    highscores.forEach(function(scoreItem, index) {
-        var rankCell = createRankCell(index + 1);
-        var scoreCell = createScoreCell(scoreItem.score);
-        var initialsCell = createInitialsCell(scoreItem.initials);
-        var highscoreTableRow = createHighscoreTableRow(rankCell, scoreCell, initialsCell);
-        scoreTable.appendChild(highscoreTableRow);
-    });
-}
-
-function createRankCell(rank) {
-    var rankCell = document.createElement('td');
-    rankCell.textContent = `#${rank}`;
-    return rankCell;
-}
-
-function createScoreCell(score) {
-    var scoreCell = document.createElement('td');
-    scoreCell.textContent = score;
-    return scoreCell;
-}
-
-function createInitialsCell(initials) {
-    var initialsCell = document.createElement('td');
-    initialsCell.textContent = initials;
-    return initialsCell;
-}
-
-function createHighscoreTableRow(rankCell, scoreCell, initialsCell) {
-    var tableRow = document.createElement('tr');
-    tableRow.appendChild(rankCell);
-    tableRow.appendChild(scoreCell);
-    tableRow.appendChild(initialsCell);
-    return tableRow;
-}
-
-//Clear scores
-function clearHighscores() {
-    localStorage.setItem('scoreList', []);
-    while (scoreTable.children.length > 1) {
-        scoreTable.removeChild(scoreTable.lastChild);
     }
 }

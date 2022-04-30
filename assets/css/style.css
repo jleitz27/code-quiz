@@ -56,15 +56,9 @@ header nav ul{
 
 #answers {
     list-style: none;
-    padding-left: 0;
+   
 }
 
-/* button {
-    margin-left: 0.5em 0.5em 0 0.5em ;
-    display: inline-block;
-    padding: 5px 15px;
-    
-}  */
 /* Hidden */
 .hidden {
     display: none;
@@ -99,6 +93,14 @@ header nav ul{
     text-decoration: none;
 }
 
-td{
+td, th {
     font-size: 20px;
+    color: var(--primarycolor);
+    
+    
+}
+.scores {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
